@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Upload de Planilha — Excel / Google Sheets</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <div class="tabs">
+          <div class="tab active" data-tab="upload">Upload</div>
+          <div class="tab" data-tab="config">Configurações</div>
+        </div>
+
+        <!-- Conteúdo da aba Upload -->
+        <div id="tab-upload" class="tab-content active">
+          <h1>Enviar planilha (Excel ou Google Sheets)</h1>
+          <p class="muted">
+            Escolha um arquivo Excel (.xls, .xlsx, .csv) ou cole o link público
+            de uma Google Sheet.
+          </p>
+
+          <!-- Upload de arquivo -->
+          <div>
+            <label for="fileInput">Arquivo Excel (.xls, .xlsx, .csv)</label>
+            <input
+              id="fileInput"
+              type="file"
+              accept=".xls,.xlsx,.csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
+            />
+            <div class="note">Dica: arraste e solte o arquivo aqui.</div>
+          </div>
+
+          <div class="or">ou</div>
+
+          <!-- Google Sheets -->
+          <div>
+            <label for="sheetUrl">Link da Google Sheet</label>
+            <div class="row">
+              <input
+                id="sheetUrl"
+                class="col"
+                type="url"
+                placeholder="https://docs.google.com/spreadsheets/d/ID/edit#gid=0"
+              />
+              <button id="importBtn" class="btn secondary">Importar</button>
+            </div>
+          </div>
+
+          <!-- Ações -->
+          <div
+            style="
+              margin-top: 18px;
+              display: flex;
+              gap: 8px;
+              align-items: center;
+            "
+          >
+            <button id="uploadBtn" class="btn">Enviar arquivo</button>
+            <button id="clearBtn" class="btn secondary">Limpar</button>
+          </div>
+
+          <div class="progress" aria-hidden="true" style="margin-top: 12px">
+            <i id="progressBar"></i>
+          </div>
+          <div id="status" class="response" style="display: none"></div>
+        </div>
+
+        <!-- Conteúdo da aba Configurações -->
+        <div id="tab-config" class="tab-content">
+          <h2>Configurações</h2>
+          <p class="muted">
+            Escolha quais campos da planilha usar para nomes e e-mails.
+          </p>
+
+          <div style="margin-bottom: 16px">
+            <label for="fieldName">Campo para nomear arquivos</label>
+            <select id="fieldName" class="col">
+              <option value="">Selecione uma coluna...</option>
+            </select>
+            <div class="note">Exemplo: coluna NOME → MARIA_1_20250914.docx</div>
+          </div>
+
+          <div style="margin-bottom: 16px">
+            <label for="fieldEmail">Campo para envio por e-mail</label>
+            <select id="fieldEmail" class="col">
+              <option value="">Selecione uma coluna...</option>
+            </select>
+            <div class="note">
+              Exemplo: coluna E-MAIL → envia para o estudante
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 20px">
+            <button id="generateBtn" class="btn">Gerar documentos</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/script.js"></script>
+  </body>
+</html>

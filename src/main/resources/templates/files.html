@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquivos Gerados</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 2rem;
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        h2 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        h3 {
+            margin: 1.2rem 0 0.5rem;
+            color: #444;
+        }
+        p.models-summary {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .person-group {
+            border: 1px solid #e6e6e6;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: #fafafa;
+        }
+        .actions {
+            margin-top: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+        .btn-primary { background-color: #007bff; }
+        .btn-primary:hover { background-color: #0056b3; }
+        .btn-secondary { background-color: #6c757d; }
+        .btn-secondary:hover { background-color: #545b62; }
+        .btn-success { background-color: #28a745; }
+        .btn-success:hover { background-color: #1e7e34; }
+        .btn-warning { background-color: #ffc107; color: #212529; }
+        .btn-warning:hover { background-color: #e0a800; }
+        .all-files-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Arquivos Gerados</h2>
+
+    <!-- Resumo geral dos modelos -->
+    <p class="models-summary" th:if="${!models.isEmpty()}">
+        Resultado da geração dos arquivos:
+        <span th:each="m, stat : ${models}">
+            <span th:text="${m}"></span><span th:if="${!stat.last}">; </span>
+        </span>
+    </p>
+
+    <p th:if="${groups.isEmpty()}" style="color: #6c757d;">
+        Nenhum arquivo gerado para download.
+    </p>
+
+    <!-- Agrupado por pessoa -->
+    <div th:each="group : ${groups}" class="person-group">
+        <h3 th:text="${group}"></h3>
+        <div class="actions">
+            <a class="btn btn-sm btn-primary"
+               th:href="@{/downloadGroup(person=${group})}">
+                Baixar .zip
+            </a>
+            <a class="btn btn-sm btn-secondary"
+               th:href="@{/sendEmailGroup(person=${group})}">
+                Enviar por e-mail
+            </a>
+        </div>
+    </div>
+
+    <!-- Ações globais -->
+    <div th:if="${!groups.isEmpty()}" class="all-files-actions">
+        <a class="btn btn-success" th:href="@{/downloadAll}">
+            Baixar todos
+        </a>
+        <a class="btn btn-warning" th:href="@{/sendAllEmails}">
+            Enviar todos por e-mail
+        </a>
+    </div>
+</div>
+</body>
+</html>

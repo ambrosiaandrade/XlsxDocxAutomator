@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ops! Ocorreu um Erro</title>
+</head>
+<body>
+<h1>Ocorreu um Erro</h1>
+<p>Detalhes do Erro:</p>
+<ul>
+    <li><strong>Tipo do Erro:</strong> <span th:text="${errorType}"></span></li>
+    <li><strong>Mensagem:</strong> <span th:text="${errorMessage}"></span></li>
+    <li><strong>Timestamp:</strong> <span th:text="${timestamp}"></span></li>
+</ul>
+<p>Por favor, tente novamente mais tarde.</p>
+<a th:href="@{/}">Voltar para a página inicial</a>
+</body>
+</html>
