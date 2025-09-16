@@ -1,0 +1,56 @@
+# =========================
+# Build & output directories
+# =========================
+/target/
+/out/
+/build/
+/bin/
+
+# =========================
+# IDEs
+# =========================
+# IntelliJ IDEA
+/.idea/
+/*.iml
+/out/
+
+# VS Code
+/.vscode/
+/workspace.xml
+
+# Eclipse
+/.classpath
+/.project
+/.settings/
+
+# =========================
+# OS-specific
+# =========================
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =========================
+# Temporary files
+# =========================
+target/
+/shelf/
+*.log
+*.tmp
+*.bak
+*.swp
+*.DS_Store
+
+# =========================
+# Maven / Gradle
+# =========================
+/.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+*.war
+*.jar
+*.class
+*.keystore
