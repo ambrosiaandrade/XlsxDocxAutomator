@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Fluxo Genérico - Gerador de Documentos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style/flow.css" />
+  </head>
+  <body>
+    <nav class="flex justify-center gap-4 mb-6 text-blue-600 text-sm mt-6">
+      <a href="index.html" class="hover:underline">Início</a>
+      <a href="tutorial.html" class="hover:underline">Tutorial</a>
+      <a href="about.html" class="hover:underline">Sobre</a>
+      <a href="config.html" class="hover:underline">Configuração</a>
+    </nav>
+    <div class="container card">
+      <div class="flex-grow">
+        <h3 class="card-title">Fluxo Genérico</h3>
+        <p class="muted">
+          Suba sua planilha e seu próprio modelo de documento (.docx) para
+          personalização.
+        </p>
+
+        <div class="mt-4">
+          <label for="fileInputGeneric">Planilha (.xls, .xlsx, .csv)</label>
+          <div id="drop-area-generic" class="drop-area">
+            <p>
+              Arraste e solte o arquivo aqui, ou
+              <label class="text-blue-500 underline cursor-pointer"
+                >clique para selecionar</label
+              >.
+            </p>
+            <input
+              id="fileInputGeneric"
+              type="file"
+              hidden
+              accept=".xls,.xlsx,.csv"
+            />
+          </div>
+        </div>
+
+        <div class="or">e</div>
+
+        <div>
+          <label for="docInputGeneric">Modelo Word (.docx)</label>
+          <div id="drop-area-doc" class="drop-area">
+            <p>
+              Arraste e solte o arquivo aqui, ou
+              <label class="text-blue-500 underline cursor-pointer"
+                >clique para selecionar</label
+              >.
+            </p>
+            <input
+              id="docInputGeneric"
+              type="file"
+              hidden
+              accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            />
+          </div>
+        </div>
+
+        <div class="or">ou</div>
+
+        <div>
+          <label for="sheetUrlGeneric">Link da Google Sheet</label>
+          <div class="row">
+            <input
+              id="sheetUrlGeneric"
+              class="col"
+              type="url"
+              placeholder="https://docs.google.com/spreadsheets/d/ID/edit#gid=0"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="action-buttons flex justify-end gap-2 mt-auto">
+        <button id="importBtnGeneric" class="btn">Importar</button>
+        <button id="generateBtnGeneric" class="btn">Gerar Documentos</button>
+      </div>
+
+      <!-- Seção de status e progresso (oculta) -->
+      <div
+        id="status-section"
+        class="flex flex-col items-center mt-8"
+        style="display: none"
+      >
+        <div class="progress w-full">
+          <i id="progressBar"></i>
+        </div>
+        <div id="status" class="response w-full" style="display: none"></div>
+      </div>
+    </div>
+    <script src="js/script.js"></script>
+    <script src="js/generic-flow.js"></script>
+  </body>
+</html>

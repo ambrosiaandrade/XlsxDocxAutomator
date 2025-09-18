@@ -8,12 +8,9 @@ const status = document.getElementById("status");
 const progressBar = document.getElementById("progressBar");
 
 // Novos elementos do frontend
-const config = document.getElementById("tab-config");
-const fieldProvider = document.getElementById("fieldProvider");
-const fieldEmail = document.getElementById("fieldEmail");
-const fieldPassword = document.getElementById("fieldPassword");
+
 const generateBtn = document.getElementById("generateBtn");
-const mailCredentialsBtn = document.getElementById("mailCredentialsBtn");
+
 const downloadAllBtn = document.getElementById("downloadAllBtn");
 const sendAllBtn = document.getElementById("sendAllBtn");
 
@@ -30,24 +27,6 @@ function setStatus(text, isError = false) {
 
 function setProgress(percent) {
   progressBar.style.width = (percent || 0) + "%";
-}
-
-// Preencher selects com colunas
-function populateColumns(columns = []) {
-  columName.innerHTML = '<option value="">Selecione uma coluna...</option>';
-  columEmail.innerHTML = '<option value="">Selecione uma coluna...</option>';
-  columns.forEach((col) => {
-    const opt1 = document.createElement("option");
-    opt1.value = col;
-    opt1.textContent = col;
-    columName.appendChild(opt1);
-
-    const opt2 = document.createElement("option");
-    opt2.value = col;
-    opt2.textContent = col;
-    columEmail.appendChild(opt2);
-  });
-  goToConfigTab();
 }
 
 // Upload de arquivo via fetch + FormData
@@ -76,9 +55,6 @@ async function uploadFile(file) {
     setProgress(100);
     setStatus("Upload concluído com sucesso.");
 
-    if (data?.columns) {
-     // populateColumns(data.columns);
-    }
   } catch (err) {
     console.error(err);
     setStatus("Falha no upload: " + err.message, true);
@@ -109,9 +85,6 @@ async function importSheet(url) {
     setProgress(100);
     setStatus("Importação concluída com sucesso.");
 
-    if (data?.columns) {
-     // populateColumns(data.columns);
-    }
   } catch (err) {
     console.error(err);
     setStatus("Falha ao importar: " + err.message, true);
@@ -146,86 +119,9 @@ document.addEventListener("drop", (e) => {
 });
 
 // Botões de ação (exemplo)
-testCredentialsBtn?.addEventListener("click", async () => {
 
-setStatus(`Testando credenciais...`);
-    setProgress(30);
-
-    try {
-
-        const res = await fetch('/validateAndSend', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(text || res.status);
-        }
-
-        const responseData = await res.json();
-
-        setProgress(100);
-        setStatus("Credenciais validadas com sucesso!");
-
-        if (responseData?.redirectUrl) {
-          window.location.href = responseData.redirectUrl;
-        }
-      } catch (err) {
-        console.error(err);
-        setStatus("Erro ao testar credenciais: " + err.message, true);
-        setProgress(0);
-      }
-    });
-
-
-mailCredentialsBtn?.addEventListener("click", async () => {
-  const provider = fieldProvider.value;
-  const sender = fieldEmail.value;
-  const password = fieldPassword.value;
-
-  setStatus(`Salvando credenciais...`);
-    setProgress(30);
-
-    try {
-        const data = {
-          provider: fieldProvider.value,
-          email: fieldEmail.value,
-          password: fieldPassword.value
-        };
-
-        const res = await fetch('/configEmail', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
-
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(text || res.status);
-        }
-
-        const responseData = await res.json();
-
-        setProgress(100);
-        setStatus("Credenciais salvas com sucesso!");
-
-        if (responseData?.redirectUrl) {
-          window.location.href = responseData.redirectUrl;
-        }
-      } catch (err) {
-        console.error(err);
-        setStatus("Erro ao salvar credenciais: " + err.message, true);
-        setProgress(0);
-      }
-    });
 
 generateBtn?.addEventListener("click", async () => {
-
   setStatus(`Gerando documentos...`);
   setProgress(30);
 
@@ -266,25 +162,3 @@ generateBtn?.addEventListener("click", async () => {
     setProgress(0);
   }
 });
-
-// Tabs simples
-document.querySelectorAll(".tab").forEach((tab) => {
-  tab.addEventListener("click", () => {
-    document
-      .querySelectorAll(".tab")
-      .forEach((t) => t.classList.remove("active"));
-    document
-      .querySelectorAll(".tab-content")
-      .forEach((c) => c.classList.remove("active"));
-    tab.classList.add("active");
-    document.getElementById("tab-" + tab.dataset.tab).classList.add("active");
-  });
-});
-
-// Quando upload terminar, troca para aba "Configurações"
-function goToConfigTab() {
-  document.querySelector('.tab[data-tab="config"]').click();
-}
-
-// Exemplo: chamar após populateColumns()
-// goToConfigTab();

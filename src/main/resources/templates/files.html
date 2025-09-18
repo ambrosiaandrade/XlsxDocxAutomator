@@ -1,77 +1,350 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Arquivos Gerados</title>
-    <link rel="stylesheet" href="style-files.css" />
-</head>
-<body>
-<div class="container">
-    <h2>Arquivos Gerados</h2>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style-commum.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background: #f7f7f8;
+        color: #23272f;
+        margin: 0;
+      }
+      .container {
+        max-width: 700px;
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+        padding: 32px 24px 28px 24px;
+      }
+      h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2563eb;
+        margin-bottom: 18px;
+        letter-spacing: -1px;
+      }
+      .models-summary {
+        color: #64748b;
+        font-size: 1rem;
+        margin-bottom: 18px;
+      }
+      .person-group {
+        background: #f9fafb;
+        border-radius: 12px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+        padding: 18px 20px 14px 20px;
+        margin-bottom: 18px;
+        border: 1px solid #e5e7eb;
+      }
+      .person-group h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0 0 2px 0;
+        color: #1e293b;
+      }
+      .person-group p {
+        color: #64748b;
+        font-size: 0.97rem;
+        margin: 0 0 12px 0;
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+      }
+      .btn {
+        border: none;
+        border-radius: 8px;
+        padding: 8px 18px;
+        font-size: 0.97rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+        background: #2563eb;
+        color: #fff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+      }
+      .btn-primary {
+        background: #2563eb;
+        color: #fff;
+      }
+      .btn-success {
+        background: #10b981;
+        color: #fff;
+      }
+      .btn-warning {
+        background: #f59e0b;
+        color: #fff;
+      }
+      .btn-secondary {
+        background: #fff;
+        color: #2563eb;
+        border: 1px solid #2563eb;
+      }
+      .btn:hover,
+      .btn:focus {
+        filter: brightness(1.08);
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+      }
+      .btn:active {
+        filter: brightness(0.97);
+      }
+      .btn-sm {
+        padding: 6px 14px;
+        font-size: 0.93rem;
+      }
+      .all-files-actions {
+        margin-top: 28px;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+      a {
+        text-decoration: none;
+      }
+      a.btn:visited {
+        color: #fff;
+      }
+      @media (max-width: 600px) {
+        .container {
+          padding: 12px 4vw;
+        }
+        .person-group {
+          padding: 12px 6vw;
+        }
+        .all-files-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="flex justify-center gap-4 mb-6 text-blue-600 text-sm mt-6">
+      <a href="index.html" class="hover:underline">Início</a>
+      <a href="about.html" class="hover:underline">Sobre</a>
+      <a href="config.html" class="hover:underline">Configuração</a>
+    </nav>
+    <div class="container">
+      <h2>Arquivos Gerados</h2>
 
-    <!-- Resumo geral dos modelos -->
-    <p class="models-summary" th:if="${!models.isEmpty()}">
-        Resultado da geração dos arquivos:
+      <!-- Resumo geral dos modelos -->
+      <p class="models-summary" th:if="${!models.isEmpty()}">
+        <span style="font-weight: 600; color: #1e293b">Modelos gerados:</span>
         <span th:each="m, stat : ${models}">
-            <span th:text="${m}"></span><span th:if="${!stat.last}">; </span>
+          <span th:text="${m}"></span><span th:if="${!stat.last}">; </span>
         </span>
-    </p>
+      </p>
 
-    <p th:if="${groups.isEmpty()}" style="color: #6c757d;">
-        Nenhum arquivo gerado para download.
-        <br>
-        <a class="btn btn-primary" th:href="@{/}">
-            Voltar para a Home
-        </a>
-    </p>
+      <p
+        th:if="${groups.isEmpty()}"
+        style="color: #94a3b8; text-align: center; margin: 32px 0 0 0"
+      >
+        Nenhum arquivo gerado para download.<br />
+      </p>
 
-    <!-- Agrupado por pessoa -->
-    <div th:each="entry : ${groups}" class="person-group">
-        <!-- entry.key = nome / entry.value = e-mail -->
-        <h3 th:text="${entry.key}"></h3>
-        <p th:text="${entry.value}"></p>
+      <!-- Filtro de pessoas -->
+      <input
+        id="filterInput"
+        type="text"
+        placeholder="Filtrar por nome..."
+        style="
+          width: 100%;
+          margin-bottom: 18px;
+          padding: 10px 14px;
+          border-radius: 8px;
+          border: 1px solid #e5e7eb;
+          font-size: 1rem;
+        "
+        oninput="filterPeople()"
+        th:if="${!groups.isEmpty()}"
+      />
 
-        <div class="actions">
-            <a class="btn btn-sm btn-primary"
-               th:href="@{/downloadGroup(person=${entry.key})}">
-                Baixar .zip
-            </a>
-            <button class="btn btn-sm btn-secondary"
-                    th:attr="data-person=${entry.key}, data-email=${entry.value}"
-                    onclick="sendEmail(this)">
-                Enviar por e-mail
+      <!-- Agrupado por pessoa -->
+      <div id="peopleList">
+        <div
+          th:each="entry : ${groups}"
+          class="person-group"
+          data-person="[[${entry.key}]]"
+        >
+          <!-- entry.key = nome / entry.value = e-mail -->
+          <h3 th:text="${entry.key}"></h3>
+          <p th:text="${entry.value}"></p>
+          <div class="actions">
+            <a
+              class="btn btn-sm btn-primary"
+              th:href="@{/downloadGroup(person=${entry.key})}"
+              >Baixar .zip</a
+            >
+            <button
+              class="btn btn-sm btn-secondary"
+              th:attr="data-person=${entry.key}, data-email=${entry.value}"
+              onclick="sendEmail(this)"
+            >
+              Enviar por e-mail
             </button>
+          </div>
         </div>
+      </div>
+
+      <!-- Seção de status e progresso (oculta) -->
+      <div
+        id="status-section"
+        style="display: none; margin: 32px 0 0 0"
+        class="flex flex-col items-center"
+      >
+        <div
+          style="
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 10px;
+          "
+        >
+          <div
+            id="progressBar"
+            style="
+              height: 100%;
+              width: 0%;
+              background: linear-gradient(90deg, #60a5fa, #2563eb);
+              transition: width 0.3s;
+            "
+          ></div>
+        </div>
+        <div
+          id="status"
+          style="
+            display: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #eef2ff;
+            color: #0f172a;
+          "
+        ></div>
+      </div>
+
+      <div th:if="${!groups.isEmpty()}" class="all-files-actions">
+        <a class="btn btn-success" th:href="@{/downloadAll}">Baixar todos</a>
+        <button class="btn btn-warning" type="button" onclick="sendAllEmails()">
+          Enviar todos por e-mail
+        </button>
+      </div>
     </div>
 
-    <!-- Ações globais -->
-    <div th:if="${!groups.isEmpty()}" class="all-files-actions">
-        <a class="btn btn-success" th:href="@{/downloadAll}">
-            Baixar todos
-        </a>
-        <a class="btn btn-warning" th:href="@{/sendAllEmails}">
-            Enviar todos por e-mail
-        </a>
-    </div>
+    <script>
+      function setStatus(text, isError = false) {
+        const statusSection = document.getElementById("status-section");
+        const status = document.getElementById("status");
+        statusSection.style.display = "flex";
+        status.style.display = "block";
+        status.textContent = text;
+        status.style.background = isError ? "#fee2e2" : "#eef2ff";
+        status.style.color = isError ? "#7f1d1d" : "#0f172a";
+      }
+      function setProgress(percent) {
+        const statusSection = document.getElementById("status-section");
+        const progressBar = document.getElementById("progressBar");
+        statusSection.style.display = "flex";
+        progressBar.style.width = (percent || 0) + "%";
+      }
+      function hideStatus() {
+        document.getElementById("status-section").style.display = "none";
+      }
+      function sendEmail(button) {
+        const person = button.getAttribute("data-person");
+        const email = button.getAttribute("data-email");
+        setStatus("Enviando e-mail para " + person + "...");
+        setProgress(30);
+        fetch(
+          `/sendEmailGroup?person=${encodeURIComponent(
+            person
+          )}&email=${encodeURIComponent(email)}`
+        )
+          .then(async (res) => {
+            let data;
+            try {
+              data = await res.json();
+            } catch (e) {
+              data = {};
+            }
+            setProgress(100);
+            if (!res.ok) {
+              setStatus(data.error || "Erro ao enviar e-mail.", true);
+            } else {
+              setStatus(data.message || "E-mail enviado com sucesso!");
+            }
+            setTimeout(hideStatus, 2500);
+          })
+          .catch((err) => {
+            setStatus("Erro ao enviar e-mail.", true);
+            setProgress(0);
+            setTimeout(hideStatus, 2500);
+          });
+      }
 
-</div>
+      // Filtro de pessoas pelo nome (usando o texto do <h3>)
+      function filterPeople() {
+        const input = document.getElementById("filterInput");
+        const filter = input.value.toLowerCase();
+        const people = document.querySelectorAll("#peopleList .person-group");
+        people.forEach((div) => {
+          const h3 = div.getElementsByTagName("h3")[0];
+          const name = h3 ? h3.textContent : "";
+          if (name.toLowerCase().includes(filter)) {
+            div.style.display = "";
+          } else {
+            div.style.display = "none";
+          }
+        });
+      }
 
-<script>
-    function sendEmail(button) {
-     const person = button.getAttribute('data-person');
-     const email = button.getAttribute('data-email');
-
-     fetch(`/sendEmailGroup?person=${encodeURIComponent(person)}&email=${encodeURIComponent(email)}`)
-         .then(res => res.json())
-         .then(data => {
-             alert(data.message); // feedback
-         })
-         .catch(err => {
-             console.error(err);
-             alert('Erro ao enviar e-mail.');
-         });
- }
-</script>
-</body>
+      // Envia todos por e-mail sem recarregar a página
+      function sendAllEmails() {
+        setStatus("Enviando todos os e-mails...");
+        setProgress(30);
+        fetch("/sendAllEmails")
+          .then(async (res) => {
+            let data;
+            try {
+              data = await res.json();
+            } catch (e) {
+              data = {};
+            }
+            setProgress(100);
+            if (!res.ok) {
+              setStatus(data.error || "Erro ao enviar e-mails.", true);
+            } else {
+              setStatus(data.message || "E-mails enviados.");
+              if (data.errors) {
+                setStatus(
+                  (data.message || "E-mails enviados.") +
+                    "\nFalhas: " +
+                    data.errors,
+                  true
+                );
+              }
+            }
+            setTimeout(hideStatus, 3500);
+          })
+          .catch((err) => {
+            setStatus("Erro ao enviar e-mails.", true);
+            setProgress(0);
+            setTimeout(hideStatus, 2500);
+          });
+      }
+    </script>
+  </body>
 </html>

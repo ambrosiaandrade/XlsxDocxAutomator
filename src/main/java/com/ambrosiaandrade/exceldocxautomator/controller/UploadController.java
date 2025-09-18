@@ -30,7 +30,7 @@ public class UploadController {
     private final ExcelReader excelReader;
 
     private static final String PATH_LIST = "/list";
-    private static final String PATH_UPLOAD = "/upload";
+    private static final String PATH_UPLOAD = "/upload-upe";
     private static final String KEY_FILES = "files";
     private static final String KEY_UPLOADED = "uploaded";
     private static final String KEY_ERROR = "error";
@@ -71,7 +71,7 @@ public class UploadController {
             session.setAttribute(KEY_UPLOADED, rows);
             session.setAttribute(KEY_FILES, processDocumentService.getPaths());
 
-            return ResponseEntity.ok(Map.of("redirectUrl", PATH_LIST));
+            return ResponseEntity.ok(Map.of("message", "Upload com sucesso")); //"redirectUrl", PATH_LIST
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(500).body(Map.of(KEY_ERROR, e.getMessage()));

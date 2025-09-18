@@ -1,6 +1,5 @@
 package com.ambrosiaandrade.exceldocxautomator.component;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
@@ -11,7 +10,7 @@ public class CryptoUtil {
 
     private final TextEncryptor encryptor;
 
-    public CryptoUtil(@Value("${crypto.secretKey}") String secretKey,
+    public CryptoUtil(@Value("${crypto.secretKey:defaultSecret}") String secretKey,
                       @Value("${crypto.salt}") String salt) {
         // secretKey = senha que você define no servidor (ex: variável de ambiente)
         // salt = string aleatória em hexadecimal (também pode estar no application.properties)

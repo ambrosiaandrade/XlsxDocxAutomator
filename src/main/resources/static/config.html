@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Upload de Planilha — Excel / Google Sheets</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style-commum.css" />
+    <style>
+      .progress {
+        height: 10px;
+        background: #eee;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 20px;
+      }
+
+      .progress > i {
+        display: block;
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #60a5fa, #3b82f6);
+        transition: width 0.3s ease-in-out;
+      }
+
+      .response {
+        margin-top: 20px;
+        padding: 16px;
+        border-radius: var(--radius-sm);
+        background: #f3f4f6;
+        color: #111;
+      }
+
+      /* Estilo para a caixa de seleção */
+      select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-family: inherit;
+        background-color: white;
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236b7280'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px top 50%;
+        background-size: 20px;
+      }
+
+      /* Estilo para o link em configurações */
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+      /* Alinhamento dos botões no rodapé */
+      .action-buttons {
+        margin-top: 24px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+    </style>
+    <link rel=
+  </head>
+  <body>
+    <nav class="flex justify-center gap-4 mb-6 text-blue-600 text-sm mt-6">
+      <a href="index.html" class="hover:underline">Início</a>
+      <a href="tutorial.html" class="hover:underline">Tutorial</a>
+      <a href="about.html" class="hover:underline">Sobre</a>
+    </nav>
+
+    <div class="container">
+      <div class="card">
+        <h2>Configurações</h2>
+        <p class="muted">
+          Digite os campos para enviar pelo e-mail do
+          <strong>Google (Gmail)</strong> ou <strong>Outlook</strong>.
+        </p>
+
+        <div class="row">
+          <div class="col">
+            <label for="fieldProvider">Provedor de email</label>
+            <select id="fieldProvider">
+              <option value="gmail">Gmail</option>
+              <option value="outlook">Outlook</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label for="fieldEmail">Email</label>
+            <input
+              type="email"
+              id="fieldEmail"
+              placeholder="seuemail@exemplo.com"
+            />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label for="fieldPassword">Senha / App Password</label>
+            <input type="password" id="fieldPassword" placeholder="•••••••••" />
+            <small class="muted text-sm mt-1 block">
+              <ul>
+                <li>
+                  <strong>Gmail:</strong> É obrigatório usar uma
+                  <em>Senha de App</em> (não sua senha normal).
+                </li>
+                <li>
+                  <strong>Outlook:</strong> Você pode usar sua senha normal, a
+                  menos que sua conta tenha 2FA ativado.
+                </li>
+              </ul>
+              <a
+                href="https://myaccount.google.com/apppasswords"
+                target="_blank"
+              >
+                Gerar senha de app para Gmail
+              </a>
+            </small>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button id="mailCredentialsBtn" class="btn">
+            Salvar credenciais
+          </button>
+          <button id="testCredentialsBtn" class="btn secondary">
+            Testar credenciais
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção de status e progresso -->
+    <div class="container">
+      <div class="progress" aria-hidden="true" style="display: none">
+        <i id="progressBar"></i>
+      </div>
+      <div id="status" class="response" style="display: none"></div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/upload.js"></script>
+  </body>
+</html>

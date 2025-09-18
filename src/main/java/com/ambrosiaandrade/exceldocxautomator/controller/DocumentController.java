@@ -58,7 +58,7 @@ public class DocumentController {
         return KEY_FILES;
     }
 
-    @PostMapping(PATH_GENERATE)
+    @GetMapping(PATH_GENERATE)
     public ResponseEntity<?> generateDocument(HttpSession session) throws IOException {
 
         var rows = (List<List<String>>) session.getAttribute(KEY_UPLOADED);

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Página Inicial - Gerador de Documentos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style-commum.css" />
+    <style>
+      .flow-card {
+        transition: transform 0.2s ease-in-out;
+      }
+
+      .flow-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .flow-card a {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        color: #2c2c2c;
+        text-decoration: none;
+      }
+
+      .flow-card a:hover {
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="flex justify-center gap-4 mb-6 text-blue-600 text-sm mt-6">
+      <a href="tutorial.html" class="hover:underline">Tutorial</a>
+      <a href="about.html" class="hover:underline">Sobre</a>
+      <a href="config.html" class="hover:underline">Configuração</a>
+    </nav>
+
+    <main class="container mx-auto px-4">
+      <section class="text-center mb-10">
+        <h1 class="text-4xl font-extrabold text-gray-800 mb-3">Bem-vindo!</h1>
+        <p class="text-lg text-gray-600 mb-2">
+          Selecione um fluxo para começar.<br />
+          O fluxo <span class="text-blue-600 font-semibold">UPE</span> utiliza
+          modelos institucionais.<br />
+          O fluxo
+          <span class="text-blue-600 font-semibold">Genérico</span> permite usar
+          seus próprios modelos.
+        </p>
+        <p class="text-sm text-gray-500">
+          Para enviar por e-mail, faça a
+          <a
+            href="config.html"
+            class="text-blue-600 underline hover:text-blue-800"
+            >configuração</a
+          >
+          antes de começar.
+        </p>
+      </section>
+
+      <div class="flex flex-col md:flex-row gap-8 justify-center">
+        <!-- Card para Fluxo UPE -->
+        <div
+          class="card flow-card flex-1 hover:shadow-lg transition cursor-pointer"
+        >
+          <a href="upe-flow.html" class="flex items-center gap-4">
+            <span class="bg-blue-100 p-3 rounded-full">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="36"
+                height="36"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#3b82f6"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.414A2 2 0 0 0 18.414 6H16a2 2 0 0 1-2-2V2Z"
+                />
+                <path d="M12 12H8" />
+                <path d="M16 16H8" />
+                <path d="M16 12H12" />
+              </svg>
+            </span>
+            <div>
+              <h3 class="text-xl font-bold text-blue-700 mb-1">Fluxo UPE</h3>
+              <p class="text-gray-600 text-sm">
+                Suba a sua planilha e gere documentos com base nos modelos
+                institucionais.
+              </p>
+            </div>
+          </a>
+        </div>
+
+        <!-- Card para Fluxo Genérico -->
+        <div
+          class="card flow-card flex-1 hover:shadow-lg transition cursor-pointer"
+        >
+          <a href="generic-flow.html" class="flex items-center gap-4">
+            <span class="bg-blue-100 p-3 rounded-full">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="36"
+                height="36"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#3b82f6"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+                />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="9" x2="9" y1="15" y2="22" />
+                <line x1="12" x2="12" y1="15" y2="22" />
+                <line x1="15" x2="15" y1="15" y2="22" />
+              </svg>
+            </span>
+            <div>
+              <h3 class="text-xl font-bold text-blue-700 mb-1">
+                Fluxo Genérico
+              </h3>
+              <p class="text-gray-600 text-sm">
+                Suba sua planilha e seu próprio modelo de documento (.docx) para
+                personalização.
+              </p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
