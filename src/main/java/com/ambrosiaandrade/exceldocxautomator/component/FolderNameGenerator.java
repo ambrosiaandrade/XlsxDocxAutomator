@@ -59,10 +59,5 @@ public class FolderNameGenerator {
         }
     }
 
-    // Example usage
-    public static void main(String[] args) {
-        System.out.println(generateFolderName("Maria Torres"));  // MariaTorres_06AB5FF0
-        System.out.println(generateFolderName("João Albuquerque"));  // JooAlbuquerque_CF32EEBF
-    }
 }
 

@@ -40,6 +40,8 @@ public class UploadController {
         this.excelReader = excelReader;
     }
 
+    // todo tem documento que é dos professores, avaliam X estudantes numa escola
+
     // 1) Recebe arquivo (Excel ou CSV)
     @PostMapping(value = PATH_UPLOAD, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
@@ -64,10 +66,12 @@ public class UploadController {
                 rows = excelReader.parseExcel(is);
             }
 
+            rows = rows.stream().filter(i -> !i.get(0).isBlank()).toList();
+
             session.setAttribute(KEY_UPLOADED, rows);
             session.setAttribute(KEY_FILES, processDocumentService.getPaths());
 
-            return ResponseEntity.ok(Map.of("redirectUrl", PATH_LIST, "columns", rows.get(0)));
+            return ResponseEntity.ok(Map.of("redirectUrl", PATH_LIST));
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(500).body(Map.of(KEY_ERROR, e.getMessage()));
@@ -89,7 +93,7 @@ public class UploadController {
             List<List<String>> rows = excelReader.parseCsv(is);
             session.setAttribute(KEY_UPLOADED, rows);
             session.setAttribute(KEY_FILES, processDocumentService.getPaths());
-            return ResponseEntity.ok(Map.of("redirectUrl", PATH_LIST, "columns", rows.get(0)));
+            return ResponseEntity.ok(Map.of("redirectUrl", PATH_LIST));
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(Map.of(KEY_ERROR, e.getMessage()));

@@ -22,8 +22,6 @@ import static com.ambrosiaandrade.exceldocxautomator.component.SessionCleanupLis
 @RestController
 public class DownloadController {
 
-    private static final String BASE_DIR = System.getProperty("java.io.tmpdir") + "/upe";
-
     private final ZipService zipService;
 
     public DownloadController(ZipService zipService) {
@@ -70,6 +68,7 @@ public class DownloadController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
                 .body(resource);
     }
+
 }
 
 

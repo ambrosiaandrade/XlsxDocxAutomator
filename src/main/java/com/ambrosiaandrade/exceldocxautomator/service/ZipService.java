@@ -51,5 +51,6 @@ public class ZipService {
     public Resource asResource(Path zipPath) {
         return new FileSystemResource(zipPath.toFile());
     }
+
 }
 

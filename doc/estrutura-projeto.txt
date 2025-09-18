@@ -1,0 +1,27 @@
+excel-docx-automator/
+├── .mvn/
+│   └── ...
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── ambrosiaandrade/
+│   │   │           └── exceldocxautomator/
+│   │   │               ├── ExcelDocxAutomatorApplication.java  (Classe principal)
+│   │   │               ├── controller/
+│   │   │               │   └── DocumentoController.java    (Controller REST)
+│   │   │               ├── service/
+│   │   │               │   └── DocumentoService.java       (Lógica de negócio)
+│   │   │               ├── component/
+│   │   │               │   ├── DocxGenerator.java          (Componente gerador do .docx)
+│   │   │               │   └── ExcelReader.java            (Componente leitor do .xlsx)
+│   │   │               └── model/
+│   │   │                   └── DadosUsuario.java           (Classe de modelo/DTO)
+│   │   └── resources/
+│   │       ├── templates/
+│   │       │   └── seu_modelo.docx               (O modelo de documento Word)
+│   │       ├── static/
+│   │       │   └── ...
+│   │       └── application.properties              (Arquivo de configuração)
+├── pom.xml                                         (O arquivo do Maven)
+└── README.md                                       (Descrição do projeto)

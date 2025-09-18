@@ -8,12 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 import static com.ambrosiaandrade.exceldocxautomator.component.SessionCleanupListener.getOrCreateSessionFolder;
@@ -22,7 +20,6 @@ import static com.ambrosiaandrade.exceldocxautomator.component.SessionCleanupLis
 public class DocumentController {
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentController.class);
-    private static final Path BASE_DIR = Paths.get(System.getProperty("java.io.tmpdir"), "upe");
 
     private final ProcessDocumentService processDocumentService;
 
@@ -49,6 +46,8 @@ public class DocumentController {
                 .toList();
 
         var groups = session.getAttribute(KEY_GROUPS);
+        if (groups == null) groups = Collections.emptyList();
+
         var models = processDocumentService.listModelFiles();
 
         model.addAttribute(KEY_FILES, fileNames);
@@ -59,16 +58,19 @@ public class DocumentController {
         return KEY_FILES;
     }
 
-    @GetMapping(PATH_GENERATE)
-    public ResponseEntity<?> generateDocument(HttpSession session,
-                                              @RequestParam("fieldName") String name,
-                                              @RequestParam("fieldEmail") String mail) throws IOException {
+    @PostMapping(PATH_GENERATE)
+    public ResponseEntity<?> generateDocument(HttpSession session) throws IOException {
 
         var rows = (List<List<String>>) session.getAttribute(KEY_UPLOADED);
 
-        List<String> groups = new ArrayList<>();
+        if (rows == null || rows.isEmpty()) {
+            return ResponseEntity.ok(Map.of("refresh", true));
+        }
+
+        Map<String, String> groups = new HashMap<>();
         List<String> header = rows.get(0);
-        int indexName = header.indexOf(name);
+        int indexName = header.indexOf("ES_NOME");
+        int indexMail = header.contains("Endereço de e-mail") ? header.indexOf("Endereço de e-mail") : header.indexOf("ES_E-MAIL");
 
         for (int i = 1; i < rows.size(); i++) {
             List<String> row = rows.get(i);
@@ -77,10 +79,10 @@ public class DocumentController {
                 map.put(header.get(j), row.get(j));
             }
 
-            groups.add(row.get(indexName));
-
-            // for each person it will run the process document service
-            processDocumentService.run(map, row.get(indexName), getOrCreateSessionFolder(session));
+            if (!row.get(indexName).isBlank()) {
+                groups.put(row.get(indexName), row.get(indexMail));
+                processDocumentService.run(map, row.get(indexName), getOrCreateSessionFolder(session));
+            }
         }
 
         session.setAttribute(KEY_GROUPS, groups);

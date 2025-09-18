@@ -20,7 +20,7 @@ public class ExcelReader {
     public List<List<String>> parseCsv(InputStream is) throws IOException {
         List<List<String>> rows = new ArrayList<>();
         try (Reader in = new InputStreamReader(is, StandardCharsets.UTF_8);
-             CSVParser parser = new CSVParser(in, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+             CSVParser parser = new CSVParser(in, CSVFormat.DEFAULT)) {
             for (CSVRecord rec : parser) {
                 List<String> row = new ArrayList<>();
                 rec.forEach(row::add);

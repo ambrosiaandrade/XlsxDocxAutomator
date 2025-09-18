@@ -17,7 +17,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.ambrosiaandrade.exceldocxautomator.component.FolderNameGenerator.generateFolderName;
 

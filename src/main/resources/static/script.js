@@ -9,9 +9,11 @@ const progressBar = document.getElementById("progressBar");
 
 // Novos elementos do frontend
 const config = document.getElementById("tab-config");
-const fieldName = document.getElementById("fieldName");
+const fieldProvider = document.getElementById("fieldProvider");
 const fieldEmail = document.getElementById("fieldEmail");
+const fieldPassword = document.getElementById("fieldPassword");
 const generateBtn = document.getElementById("generateBtn");
+const mailCredentialsBtn = document.getElementById("mailCredentialsBtn");
 const downloadAllBtn = document.getElementById("downloadAllBtn");
 const sendAllBtn = document.getElementById("sendAllBtn");
 
@@ -32,18 +34,18 @@ function setProgress(percent) {
 
 // Preencher selects com colunas
 function populateColumns(columns = []) {
-  fieldName.innerHTML = '<option value="">Selecione uma coluna...</option>';
-  fieldEmail.innerHTML = '<option value="">Selecione uma coluna...</option>';
+  columName.innerHTML = '<option value="">Selecione uma coluna...</option>';
+  columEmail.innerHTML = '<option value="">Selecione uma coluna...</option>';
   columns.forEach((col) => {
     const opt1 = document.createElement("option");
     opt1.value = col;
     opt1.textContent = col;
-    fieldName.appendChild(opt1);
+    columName.appendChild(opt1);
 
     const opt2 = document.createElement("option");
     opt2.value = col;
     opt2.textContent = col;
-    fieldEmail.appendChild(opt2);
+    columEmail.appendChild(opt2);
   });
   goToConfigTab();
 }
@@ -75,7 +77,7 @@ async function uploadFile(file) {
     setStatus("Upload concluído com sucesso.");
 
     if (data?.columns) {
-      populateColumns(data.columns);
+     // populateColumns(data.columns);
     }
   } catch (err) {
     console.error(err);
@@ -108,7 +110,7 @@ async function importSheet(url) {
     setStatus("Importação concluída com sucesso.");
 
     if (data?.columns) {
-      populateColumns(data.columns);
+     // populateColumns(data.columns);
     }
   } catch (err) {
     console.error(err);
@@ -144,37 +146,119 @@ document.addEventListener("drop", (e) => {
 });
 
 // Botões de ação (exemplo)
-generateBtn?.addEventListener("click", async () => {
-  const name = fieldName.value;
-  const mail = fieldEmail.value;
+testCredentialsBtn?.addEventListener("click", async () => {
 
-  if (!name || !mail) {
-    setStatus("Selecione os campos de nome e e-mail antes de gerar.", true);
-    return;
-  }
+setStatus(`Testando credenciais...`);
+    setProgress(30);
+
+    try {
+
+        const res = await fetch('/validateAndSend', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(text || res.status);
+        }
+
+        const responseData = await res.json();
+
+        setProgress(100);
+        setStatus("Credenciais validadas com sucesso!");
+
+        if (responseData?.redirectUrl) {
+          window.location.href = responseData.redirectUrl;
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus("Erro ao testar credenciais: " + err.message, true);
+        setProgress(0);
+      }
+    });
+
+
+mailCredentialsBtn?.addEventListener("click", async () => {
+  const provider = fieldProvider.value;
+  const sender = fieldEmail.value;
+  const password = fieldPassword.value;
+
+  setStatus(`Salvando credenciais...`);
+    setProgress(30);
+
+    try {
+        const data = {
+          provider: fieldProvider.value,
+          email: fieldEmail.value,
+          password: fieldPassword.value
+        };
+
+        const res = await fetch('/configEmail', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(text || res.status);
+        }
+
+        const responseData = await res.json();
+
+        setProgress(100);
+        setStatus("Credenciais salvas com sucesso!");
+
+        if (responseData?.redirectUrl) {
+          window.location.href = responseData.redirectUrl;
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus("Erro ao salvar credenciais: " + err.message, true);
+        setProgress(0);
+      }
+    });
+
+generateBtn?.addEventListener("click", async () => {
 
   setStatus(`Gerando documentos...`);
   setProgress(30);
 
   try {
-    const res = await fetch(
-      `/generate?fieldName=${encodeURIComponent(
-        name
-      )}&fieldEmail=${encodeURIComponent(mail)}`
-    );
+    const data = {
+      provider: fieldProvider.value,
+      sender: fieldEmail.value,
+      password: fieldPassword.value
+    };
+
+    const res = await fetch('/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
     if (!res.ok) {
       const text = await res.text();
       throw new Error(text || res.status);
     }
 
-    const data = await res.json();
+    const responseData = await res.json();
 
     setProgress(100);
     setStatus("Documentos gerados com sucesso!");
 
-    // Se backend mandar redirectUrl, redireciona
-    if (data?.redirectUrl) {
-      window.location.href = data.redirectUrl;
+    if (responseData?.redirectUrl) {
+      window.location.href = responseData.redirectUrl;
+    }
+    if(responseData?.refresh) {
+        window.location.reload();
     }
   } catch (err) {
     console.error(err);
