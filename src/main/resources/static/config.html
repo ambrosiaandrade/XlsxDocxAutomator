@@ -5,66 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Upload de Planilha — Excel / Google Sheets</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style-commum.css" />
-    <style>
-      .progress {
-        height: 10px;
-        background: #eee;
-        border-radius: 999px;
-        overflow: hidden;
-        margin-top: 20px;
-      }
-
-      .progress > i {
-        display: block;
-        height: 100%;
-        width: 0%;
-        background: linear-gradient(90deg, #60a5fa, #3b82f6);
-        transition: width 0.3s ease-in-out;
-      }
-
-      .response {
-        margin-top: 20px;
-        padding: 16px;
-        border-radius: var(--radius-sm);
-        background: #f3f4f6;
-        color: #111;
-      }
-
-      /* Estilo para a caixa de seleção */
-      select {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        font-family: inherit;
-        background-color: white;
-        appearance: none;
-        -webkit-appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236b7280'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 12px top 50%;
-        background-size: 20px;
-      }
-
-      /* Estilo para o link em configurações */
-      a {
-        color: var(--accent);
-        text-decoration: none;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
-
-      /* Alinhamento dos botões no rodapé */
-      .action-buttons {
-        margin-top: 24px;
-        display: flex;
-        gap: 12px;
-        align-items: center;
-      }
-    </style>
-    <link rel=
+    <link rel="stylesheet" href="style/flow.css" />
+    <link rel="stylesheet" href="./style/style-commum.css" />
   </head>
   <body>
     <nav class="flex justify-center gap-4 mb-6 text-blue-600 text-sm mt-6">
@@ -136,18 +78,20 @@
           </button>
         </div>
       </div>
-    </div>
 
-    <!-- Seção de status e progresso -->
-    <div class="container">
-      <div class="progress" aria-hidden="true" style="display: none">
-        <i id="progressBar"></i>
+      <!-- Seção de status e progresso (oculta) -->
+      <div
+        id="status-section"
+        class="flex flex-col items-center mt-8"
+        style="display: none"
+      >
+        <div class="progress w-full">
+          <i id="progressBar"></i>
+        </div>
+        <div id="status" class="response w-full" style="display: none"></div>
       </div>
-      <div id="status" class="response" style="display: none"></div>
     </div>
 
-    <script src="js/script.js"></script>
-    <script src="js/config.js"></script>
-    <script src="js/upload.js"></script>
+    <script type="module" src="js/config.js"></script>
   </body>
 </html>

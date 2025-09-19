@@ -1,6 +1,5 @@
 package com.ambrosiaandrade.exceldocxautomator.component;
 
-import com.ambrosiaandrade.exceldocxautomator.controller.DocumentController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.FileSystemUtils;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Scheduled task that periodically cleans up old

@@ -1,6 +1,16 @@
 package com.ambrosiaandrade.exceldocxautomator.controller;
 
-import static com.ambrosiaandrade.exceldocxautomator.component.SessionCleanupListener.getOrCreateSessionFolder;
+import com.ambrosiaandrade.exceldocxautomator.component.CryptoUtil;
+import com.ambrosiaandrade.exceldocxautomator.component.FolderNameGenerator;
+import com.ambrosiaandrade.exceldocxautomator.model.MailCredentials;
+import com.ambrosiaandrade.exceldocxautomator.service.EmailService;
+import com.ambrosiaandrade.exceldocxautomator.service.ZipService;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,19 +18,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.ambrosiaandrade.exceldocxautomator.component.CryptoUtil;
-import com.ambrosiaandrade.exceldocxautomator.component.FolderNameGenerator;
-import com.ambrosiaandrade.exceldocxautomator.model.MailCredentials;
-import com.ambrosiaandrade.exceldocxautomator.service.EmailService;
-import com.ambrosiaandrade.exceldocxautomator.service.ZipService;
-
-import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpSession;
+import static com.ambrosiaandrade.exceldocxautomator.component.Constants.*;
+import static com.ambrosiaandrade.exceldocxautomator.component.SessionCleanupListener.getOrCreateSessionFolder;
 
 @RestController
 public class MailController {
@@ -41,26 +40,20 @@ public class MailController {
             HttpSession session) throws IOException, MessagingException {
         MailCredentials creds = getMailCredentials(session);
         if (creds == null) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Nenhuma configuração de e-mail encontrada."));
+            return ResponseEntity.badRequest().body(Map.of(KEY_ERROR, "Nenhuma configuração de e-mail encontrada."));
         }
         try {
             sendGroupEmail(session, creds, name, recipient);
-            return ResponseEntity.ok(Map.of("message", "E-mail enviado com sucesso!"));
+            return ResponseEntity.ok(Map.of(KEY_MSG, "E-mail enviado com sucesso!"));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of(KEY_ERROR, e.getMessage()));
         }
     }
 
-    /**
-     * Obtém as credenciais de e-mail da sessão
-     */
     private MailCredentials getMailCredentials(HttpSession session) {
-        return (MailCredentials) session.getAttribute("mailCreds");
+        return (MailCredentials) session.getAttribute(KEY_MAILCREDS);
     }
 
-    /**
-     * Envia o zip de um grupo para o e-mail informado
-     */
     private void sendGroupEmail(HttpSession session, MailCredentials creds, String name, String recipient)
             throws IOException, MessagingException {
         String decryptedPassword = cryptoUtil.decrypt(creds.encryptedPassword());
@@ -78,11 +71,11 @@ public class MailController {
     public ResponseEntity<?> sendAllEmails(HttpSession session) {
         MailCredentials creds = getMailCredentials(session);
         if (creds == null) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Nenhuma configuração de e-mail encontrada."));
+            return ResponseEntity.badRequest().body(Map.of(KEY_ERROR, "Nenhuma configuração de e-mail encontrada."));
         }
         Object groupsObj = session.getAttribute("groups");
         if (!(groupsObj instanceof Map)) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Nenhum grupo encontrado na sessão."));
+            return ResponseEntity.badRequest().body(Map.of(KEY_ERROR, "Nenhum grupo encontrado na sessão."));
         }
         @SuppressWarnings("unchecked")
         Map<String, String> groups = (Map<String, String>) groupsObj;
@@ -101,11 +94,11 @@ public class MailController {
             }
         }
         if (fail == 0) {
-            return ResponseEntity.ok(Map.of("message", "Todos os e-mails enviados com sucesso!"));
+            return ResponseEntity.ok(Map.of(KEY_MSG, "Todos os e-mails enviados com sucesso!"));
         } else {
             return ResponseEntity.ok(Map.of(
-                    "message", String.format("%d enviados, %d falharam.", success, fail),
-                    "errors", errors.toString()));
+                    KEY_MSG, String.format("%d enviados, %d falharam.", success, fail),
+                    KEY_ERROR, errors.toString()));
         }
     }
 

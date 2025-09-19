@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Fluxo Genérico - Gerador de Documentos</title>
+    <title>Fluxo UPE - Gerador de Documentos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style/flow.css" />
     <link rel="stylesheet" href="style/style-commum.css" />
@@ -13,36 +13,40 @@
       <a href="index.html" class="hover:underline">Início</a>
       <a href="tutorial.html" class="hover:underline">Tutorial</a>
       <a href="about.html" class="hover:underline">Sobre</a>
-      <a href="config.html" class="hover:underline">Configuração</a>
     </nav>
     <div class="container card">
-      <div class="flex-grow">
-        <h3 class="card-title">Fluxo Genérico</h3>
+      <div class="flex flex-col flex-grow">
+        <h3 class="card-title">Fluxo UPE</h3>
         <p class="muted">
-          Suba sua planilha e seu próprio modelo de documento (.docx) para
-          personalização.
+          Suba a sua planilha e gere documentos com base nos modelos
+          institucionais.
         </p>
 
         <div class="mt-4">
-          <label for="fileInput">Planilha (.xls, .xlsx, .csv)</label>
-          <div id="drop-area-generic" class="drop-area">
+          <label for="fileInputUPE">Planilha (.xls, .xlsx, .csv)</label>
+          <div id="drop-area-upe" class="drop-area">
             <p>
               Arraste e solte o arquivo aqui, ou
               <label class="text-blue-500 underline cursor-pointer"
                 >clique para selecionar</label
               >.
             </p>
-            <input id="fileInput" type="file" hidden accept=".xls,.xlsx,.csv" />
+            <input
+              id="fileInputUPE"
+              type="file"
+              hidden
+              accept=".xls,.xlsx,.csv"
+            />
           </div>
         </div>
 
         <div class="or">ou</div>
 
         <div>
-          <label for="sheetUrl">Link da Google Sheet</label>
+          <label for="sheetUrlUPE">Link da Google Sheet</label>
           <div class="row">
             <input
-              id="sheetUrl"
+              id="sheetUrlUPE"
               class="col"
               type="url"
               placeholder="https://docs.google.com/spreadsheets/d/ID/edit#gid=0"
@@ -50,30 +54,9 @@
           </div>
         </div>
       </div>
-
-      <div class="or">e</div>
-
-      <div>
-        <label for="docInput">Modelo Word (.docx)</label>
-        <div id="drop-area-doc" class="drop-area">
-          <p>
-            Arraste e solte o arquivo aqui, ou
-            <label class="text-blue-500 underline cursor-pointer"
-              >clique para selecionar</label
-            >.
-          </p>
-          <input
-            id="docInput"
-            type="file"
-            hidden
-            accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-          />
-        </div>
-      </div>
-
       <div class="action-buttons flex justify-end gap-2 mt-auto">
-        <button id="importBtn" class="btn">Importar</button>
-        <button id="generateBtn" class="btn">Gerar Documentos</button>
+        <button id="importBtnUPE" class="btn">Importar</button>
+        <button id="generateBtnUPE" class="btn">Gerar Documentos</button>
       </div>
 
       <!-- Seção de status e progresso (oculta) -->
@@ -88,6 +71,6 @@
         <div id="status" class="response w-full" style="display: none"></div>
       </div>
     </div>
-    <script type="module" src="js/generic-flow.js"></script>
+    <script defer src="js/upe-flow.js"></script>
   </body>
 </html>

@@ -98,7 +98,7 @@ public class SessionCleanupListener implements HttpSessionListener {
         Path sessionDir = BASE_DIR.resolve(session.getId());
         if (!Files.exists(sessionDir)) {
             Files.createDirectories(sessionDir);
-            log.info("Created session folder: {}", sessionDir);
+            log.debug("Created session folder: {}", sessionDir);
         }
         session.setAttribute("SESSION_FOLDER", sessionDir.toString());
         return sessionDir;

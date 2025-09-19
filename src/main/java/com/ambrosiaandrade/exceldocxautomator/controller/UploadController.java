@@ -1,3 +1,4 @@
+
 package com.ambrosiaandrade.exceldocxautomator.controller;
 
 import com.ambrosiaandrade.exceldocxautomator.component.ExcelReader;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.ambrosiaandrade.exceldocxautomator.component.Constants.*;
 import static com.ambrosiaandrade.exceldocxautomator.service.DownloadGoogleSheetService.downloadGoogleSheetCsv;
 
 @Controller
@@ -28,12 +30,6 @@ public class UploadController {
 
     private final ProcessDocumentService processDocumentService;
     private final ExcelReader excelReader;
-
-    private static final String PATH_LIST = "/list";
-    private static final String PATH_UPLOAD = "/upload-upe";
-    private static final String KEY_FILES = "files";
-    private static final String KEY_UPLOADED = "uploaded";
-    private static final String KEY_ERROR = "error";
 
     public UploadController(ProcessDocumentService processDocumentService, ExcelReader excelReader) {
         this.processDocumentService = processDocumentService;
@@ -68,10 +64,10 @@ public class UploadController {
 
             rows = rows.stream().filter(i -> !i.get(0).isBlank()).toList();
 
-            session.setAttribute(KEY_UPLOADED, rows);
+            session.setAttribute(KEY_UPLOADED_EXCEL, rows);
             session.setAttribute(KEY_FILES, processDocumentService.getPaths());
 
-            return ResponseEntity.ok(Map.of("message", "Upload com sucesso")); //"redirectUrl", PATH_LIST
+            return ResponseEntity.ok(Map.of(KEY_MSG, "Upload com sucesso")); // "redirectUrl", PATH_LIST
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(500).body(Map.of(KEY_ERROR, e.getMessage()));
@@ -91,7 +87,7 @@ public class UploadController {
 
         try (InputStream is = downloadGoogleSheetCsv(sheetUrl)) {
             List<List<String>> rows = excelReader.parseCsv(is);
-            session.setAttribute(KEY_UPLOADED, rows);
+            session.setAttribute(KEY_UPLOADED_EXCEL, rows);
             session.setAttribute(KEY_FILES, processDocumentService.getPaths());
             return ResponseEntity.ok(Map.of("redirectUrl", PATH_LIST));
         } catch (Exception e) {
@@ -102,6 +98,49 @@ public class UploadController {
 
     private boolean isValidType(String filename) {
         return filename.endsWith(".csv") || filename.endsWith(".xls") || filename.endsWith(".xlsx");
+    }
+
+    // todo acho que pode ser um endpoint de upload também
+    @PostMapping(value = "/upload-generic", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> uploadGeneric(
+            @RequestParam("excel") MultipartFile excelFile,
+            @RequestParam(value = "word", required = false) MultipartFile wordFile,
+            HttpSession session) {
+        processDocumentService.clearPaths();
+        if (excelFile == null || excelFile.isEmpty() || wordFile == null || wordFile.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of(KEY_ERROR, "Selecione a planilha e o modelo Word."));
+        }
+
+        String excelName = Optional.ofNullable(excelFile.getOriginalFilename()).orElse("").toLowerCase();
+        String wordName = Optional.ofNullable(wordFile.getOriginalFilename()).orElse("").toLowerCase();
+
+        if (!isValidType(excelName) || !wordName.endsWith(".docx")) {
+            return ResponseEntity.status(415).body(Map.of(KEY_ERROR, "Tipo de arquivo não suportado"));
+        }
+
+        try (InputStream excelIs = excelFile.getInputStream();
+                InputStream wordIs = wordFile.getInputStream()) {
+
+            List<List<String>> rows;
+            if (excelName.endsWith(".csv")) {
+                rows = excelReader.parseCsv(excelIs);
+            } else {
+                rows = excelReader.parseExcel(excelIs);
+            }
+            rows = rows.stream().filter(i -> !i.get(0).isBlank()).toList();
+
+            session.setAttribute(KEY_UPLOADED_EXCEL, rows);
+            session.setAttribute(KEY_UPLOADED_WORD, wordFile.getBytes());
+            session.setAttribute(KEY_WORD_NAME, wordName);
+            session.setAttribute(KEY_FILES, processDocumentService.getPaths());
+
+            return ResponseEntity.ok(Map.of(
+                    KEY_MSG, "Upload genérico com sucesso"));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(500).body(Map.of(KEY_ERROR, e.getMessage()));
+        }
     }
 
 }

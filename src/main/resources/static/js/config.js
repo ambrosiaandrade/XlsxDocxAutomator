@@ -1,3 +1,5 @@
+import { setProgress, setStatus } from "./common/status.js";
+
 const fieldProvider = document.getElementById("fieldProvider");
 const fieldEmail = document.getElementById("fieldEmail");
 const fieldPassword = document.getElementById("fieldPassword");
@@ -6,6 +8,7 @@ const mailCredentialsBtn = document.getElementById("mailCredentialsBtn");
 const testCredentialsBtn = document.getElementById("testCredentialsBtn");
 
 testCredentialsBtn?.addEventListener("click", async () => {
+  console.log("Testing mail credentials...");
   setStatus(`Testando credenciais...`);
   setProgress(30);
 
@@ -38,6 +41,7 @@ testCredentialsBtn?.addEventListener("click", async () => {
 });
 
 mailCredentialsBtn?.addEventListener("click", async () => {
+  console.log("Saving mail credentials...");
   setStatus(`Salvando credenciais...`);
   setProgress(30);
 
