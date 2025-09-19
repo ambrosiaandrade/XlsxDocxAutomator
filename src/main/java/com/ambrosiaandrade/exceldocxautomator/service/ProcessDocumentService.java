@@ -1,5 +1,6 @@
 package com.ambrosiaandrade.exceldocxautomator.service;
 
+import com.ambrosiaandrade.exceldocxautomator.model.UnidadeConcedente;
 import jakarta.servlet.http.HttpSession;
 import org.apache.poi.xwpf.usermodel.*;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.ambrosiaandrade.exceldocxautomator.component.Constants.KEY_UPLOADED_WORD;
 import static com.ambrosiaandrade.exceldocxautomator.component.Constants.KEY_WORD_NAME;
@@ -56,8 +58,6 @@ public class ProcessDocumentService {
      * it uses the generic flow; otherwise, it uses the template flow.
      *
      * @param dados         Map containing data to fill in the placeholders
-     * @param name          Name used for generating output filenames and folders
-     * @param sessionFolder Path to the session folder where documents will be saved
      * @param session       HttpSession to check for the generic Word file
      * @throws IOException
      */ // todo remover String name pq posso pegar do mapa
@@ -311,4 +311,28 @@ public class ProcessDocumentService {
         return this.paths;
     }
 
+    public UnidadeConcedente createUC(Map<String, String> map) {
+        // 1. Filtrar somente as entradas com chave começando com "UC"
+        var filtered = map.entrySet().stream()
+                .filter(e -> e.getKey().startsWith("UC"))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        // 2. Criar o record usando os valores
+        return new UnidadeConcedente(
+                filtered.get("UC_NOME"),
+                filtered.get("UC_CNPJ"),
+                filtered.get("UC_TELEFONE"),
+                filtered.get("UC_LOCAL_ESTÁGIO"),
+                filtered.get("UC_ENDEREÇO"),
+                filtered.get("UC_PONTO_REFERÊNCIA"),
+                filtered.get("UC_NÚMERO"),
+                filtered.get("UC_COMPLEMENTO"),
+                filtered.get("UC_CEP"),
+                filtered.get("UC_BAIRRO"),
+                filtered.get("UC_CIDADE"),
+                filtered.get("UC_ESTADO"),
+                filtered.get("UC_REPRESENTANTE_LEGAL"),
+                filtered.get("UC_CARGO_REPRESENTANTE")
+        );
+    }
 }

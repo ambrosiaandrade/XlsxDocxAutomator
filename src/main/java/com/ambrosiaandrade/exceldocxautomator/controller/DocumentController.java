@@ -1,5 +1,7 @@
 package com.ambrosiaandrade.exceldocxautomator.controller;
 
+import com.ambrosiaandrade.exceldocxautomator.model.Student;
+import com.ambrosiaandrade.exceldocxautomator.model.UnidadeConcedente;
 import com.ambrosiaandrade.exceldocxautomator.service.ProcessDocumentService;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -74,6 +76,21 @@ public class DocumentController {
         return KEY_GENERIC_FILES;
     }
 
+    @GetMapping(PATH_SUMMARY)
+    public String listSummary(Model model, HttpSession session) {
+        var schools = (Set<UnidadeConcedente>) session.getAttribute(KEY_SCHOOLS);
+        var students = (List<Student>) session.getAttribute(KEY_STUDENTS);
+
+        if (schools == null) schools = Collections.emptySet();
+        if (students == null) students = Collections.emptyList();
+
+        model.addAttribute(KEY_SCHOOLS, schools);
+        model.addAttribute(KEY_STUDENTS, students);
+
+        logger.info("Escolas: {}, Estudantes: {}", schools.size(), students.size());
+        return KEY_SUMMARY;
+    }
+
     @GetMapping(PATH_GENERATE)
     public ResponseEntity<?> generateDocument(HttpSession session) {
 
@@ -92,6 +109,8 @@ public class DocumentController {
         }
 
         Map<String, String> groups = new HashMap<>();
+        Set<UnidadeConcedente> schools = new HashSet<>();
+        List<Student> students = new ArrayList<>();
         List<String> header = rows.get(0);
         int indexName = getNameIndex(header);
         int indexMail = getEMailIndex(header);
@@ -108,10 +127,21 @@ public class DocumentController {
             }
 
             documentService.processDocument(map, session);
+            if (map.containsKey("ES_MATRÍCULA")) {
+                var uc = documentService.createUC(map);
+                var student = new Student(map.get("ES_NOME"), map.get("ES_MATRÍCULA"), map.get("ES_CURSO"), uc.cnpj());
+                schools.add(uc);
+                students.add(student);
+            }
         }
 
         if (!groups.isEmpty()) {
             session.setAttribute(KEY_GROUPS, groups);
+        }
+
+        if (!schools.isEmpty()) {
+            session.setAttribute(KEY_SCHOOLS, schools);
+            session.setAttribute(KEY_STUDENTS, students);
         }
 
         if (doc != null) {

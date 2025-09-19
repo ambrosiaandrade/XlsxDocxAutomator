@@ -23,7 +23,7 @@
         </p>
 
         <div class="mt-4">
-          <label for="fileInputUPE">Planilha (.xls, .xlsx, .csv)</label>
+          <label for="fileInput">Planilha (.xls, .xlsx, .csv)</label>
           <div id="drop-area-upe" class="drop-area">
             <p>
               Arraste e solte o arquivo aqui, ou
@@ -31,22 +31,17 @@
                 >clique para selecionar</label
               >.
             </p>
-            <input
-              id="fileInputUPE"
-              type="file"
-              hidden
-              accept=".xls,.xlsx,.csv"
-            />
+            <input id="fileInput" type="file" hidden accept=".xls,.xlsx,.csv" />
           </div>
         </div>
 
         <div class="or">ou</div>
 
         <div>
-          <label for="sheetUrlUPE">Link da Google Sheet</label>
+          <label for="sheetUrl">Link da Google Sheet</label>
           <div class="row">
             <input
-              id="sheetUrlUPE"
+              id="sheetUrl"
               class="col"
               type="url"
               placeholder="https://docs.google.com/spreadsheets/d/ID/edit#gid=0"
@@ -55,8 +50,8 @@
         </div>
       </div>
       <div class="action-buttons flex justify-end gap-2 mt-auto">
-        <button id="importBtnUPE" class="btn">Importar</button>
-        <button id="generateBtnUPE" class="btn">Gerar Documentos</button>
+        <button id="importBtn" class="btn">Importar</button>
+        <button id="generateBtn" class="btn">Gerar Documentos</button>
       </div>
 
       <!-- Seção de status e progresso (oculta) -->
@@ -71,6 +66,6 @@
         <div id="status" class="response w-full" style="display: none"></div>
       </div>
     </div>
-    <script defer src="js/upe-flow.js"></script>
+    <script type="module" src="js/upe-flow.js"></script>
   </body>
 </html>
